@@ -48,19 +48,21 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
     public function store(UserPostRequest $request)
     {
         $request->password = Hash::make($request->password);
 
-        $request->image =  uploadPhotos($request->image, 'images/users/');
+        // $request->image =  uploadPhotos($request->image, 'images/users/');
 
         $user = new User();
         $this->userData($user, $request);
-        $token = $user->createToken('authToken')->accessToken;
+        // return $user;
         
         $user->save();
+        $token = $user->createToken('ACCESS TOKEN')->accessToken;;
 
-        return response(['user' => $this->show($user->id), 'access_token' => $token]);
+        return response(['user' =>$user, 'access_token' => $token]);
     }
 
     /**
